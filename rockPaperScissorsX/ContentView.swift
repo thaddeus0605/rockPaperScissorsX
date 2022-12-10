@@ -10,41 +10,56 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var rps = ["✊🏻", "📄", "✂️"]
-    @State private var winOrLose = ["Win", "Lose"]
-    @State private var randomNumRPS = Int.random(in: 0...2)
-    @State private var randomNumWorL = Int.random(in: 0...1)
+    
+    @State private var randomNumRPS = Int.random(in: 0..<2)
+    @State private var shouldWin = Bool.random()
+   
+
     
     
     var body: some View {
-        ZStack {
-            VStack {
-                Text("The computer wants you to: ")
+        VStack {
+            Spacer()
+            Text("Computer has selected...")
+                .font(.headline)
+            Text(rps[randomNumRPS])
+                .font(.system(size: 200))
+            
+            if shouldWin {
+                Text("Which one wins?")
+                    .foregroundColor(.green)
                     .font(.title)
-                Text(winOrLose[randomNumWorL])
-                    .font(.title.weight(.semibold))
-                Text("Against:")
-                    .font(.title)
-                Text(rps[randomNumRPS])
-                    .font(.largeTitle.weight(.semibold))
-                VStack(spacing: 15) {
-                    VStack{
-                        Text("Make your choice: ")
+            } else {
+                Text("Which one loses?")
+                    .foregroundColor(.red)
+            }
+            HStack {
+                ForEach(0..<3) { number in
+                    Button(rps[number]) {
+                        //Move function
+                        playGame(userChoice: number)
                     }
-                    HStack{
-                        ForEach(0..<3) { number in
-                            Button {
-                                //Selection tapped
-                                print("Player selection tapped")
-                            } label: {
-                                Text(rps[number])
-                            }
-                        }
-                    }
+                    .font(.system(size: 80))
+                    
                 }
             }
+            Spacer()
+            Text("Score: ???")
+                .font(.headline)
+            Spacer()
         }
     }
-    
+    func playGame(userChoice: Int) {
+        let winningMoves = [1, 2, 0]
+        let didWin: Bool
+        
+        if shouldWin {
+            didWin = userChoice == winningMoves[randomNumRPS]
+        } else {
+            didWin = winningMoves[userChoice] == randomNumRPS
+        }
+        
+    }
 }
 
 
